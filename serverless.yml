@@ -1,0 +1,19 @@
+service: full-data-load
+
+frameworkVersion: '2'
+
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  region: ${opt:region, 'us-west-1'}
+  stage: ${opt:stage, 'dev'}
+
+custom:
+  account: ${opt:account, 'bizcontactcenter'}
+  region: ${opt:region, 'us-west-1'}
+  stage: ${opt:stage, 'dev'}
+
+functions:
+  fullDataLoad:
+    handler: handler.fullDataLoad
