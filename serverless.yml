@@ -6,14 +6,45 @@ frameworkVersion: '2'
 provider:
   name: aws
   runtime: nodejs14.x
-  region: ${opt:region, 'us-west-1'}
+  region: ${opt:region, 'us-west-2'}
   stage: ${opt:stage, 'dev'}
+  iamRoleStatements: # Grant privilege read from Kinesis work stream 
+    - Effect: Allow
+      Action:
+      - dynamodb:*
+      Resource: 
+        Fn::GetAtt: 
+          - MyTable  
+          - Arn
+    - Effect: Allow
+      Action: 's3:ListBucket'
+      Resource: arn:aws:s3:::bizdev-account-db-tables
+    - Effect: Allow
+      Action:
+      - s3:*
+      Resource: arn:aws:s3:::bizdev-account-db-tables/*
 
 custom:
   account: ${opt:account, 'bizcontactcenter'}
-  region: ${opt:region, 'us-west-1'}
+  region: ${opt:region, 'us-west-2'}
   stage: ${opt:stage, 'dev'}
 
 functions:
   fullDataLoad:
     handler: handler.fullDataLoad
+
+resources:
+  Resources:
+    MyTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: nm-dt-product-feed-dev
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 5
+          WriteCapacityUnits: 5
