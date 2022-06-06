@@ -30,7 +30,7 @@ const unzipDataFromS3AndInsertIntoDynamodb = async (data, err) => {
 
             const params = {
               Item: record.Item,
-              TableName: "nm-dt-product-feed-dev"
+              TableName: "nm-dt-product-feed-dev-replicate"
             };
             // documentClient.putItem(params, pfunc);
             await documentClient.putItem(params).promise();

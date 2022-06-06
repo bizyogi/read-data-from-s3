@@ -38,7 +38,7 @@ resources:
     MyTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: nm-dt-product-feed-dev
+        TableName: nm-dt-product-feed-dev-replicate
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S
